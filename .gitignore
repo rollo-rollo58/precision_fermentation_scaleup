@@ -1,0 +1,14 @@
+node_modules/
+.next/
+.venv/
+venv/
+__pycache__/
+target/
+dist/
+build/
+.git/
+.env
+.env.local
+*.pem
+id_rsa
+*.log

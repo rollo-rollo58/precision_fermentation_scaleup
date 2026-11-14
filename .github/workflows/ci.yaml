@@ -1,0 +1,21 @@
+name: source-audit
+on:
+  push:
+  pull_request:
+jobs:
+  source-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Frontend dependency install
+        run: cd frontend && npm install --no-audit --no-fund
+      - name: TypeScript and Next.js checks
+        run: cd frontend && npm run lint && npm run build
+      - name: Check leaked environment templates
+        run: |
+          test -f .env.example
+          test ! -f .env
+          test ! -d node_modules

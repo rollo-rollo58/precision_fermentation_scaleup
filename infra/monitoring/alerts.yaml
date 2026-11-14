@@ -1,0 +1,22 @@
+groups:
+  - name: research-domain-platform
+    interval: 30s
+    rules:
+      - alert: ApiElevatedErrorRate
+        expr: |
+          sum(rate(http_requests_total{status=~"5.."}[5m]))
+          /
+          clamp_min(sum(rate(http_requests_total[5m])), 1)
+          > 0.05
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: API error ratio exceeded five percent
+      - alert: ObservationIngestionStalled
+        expr: increase(platform_observations_total[15m]) == 0
+        for: 20m
+        labels:
+          severity: warning
+        annotations:
+          summary: Telemetry ingestion has not made progress

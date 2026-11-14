@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: precision_fermentation_scaleup-ui
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: precision_fermentation_scaleup-ui
+  template:
+    metadata:
+      labels:
+        app: precision_fermentation_scaleup-ui
+    spec:
+      containers:
+        - name: frontend
+          image: example.invalid/precision_fermentation_scaleup:replace-with-ci-built-image
+          ports:
+            - containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              memory: 128Mi
+              cpu: 100m
+            limits:
+              memory: 512Mi
+              cpu: 500m
